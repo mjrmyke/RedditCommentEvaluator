@@ -1,4 +1,4 @@
-//TODO REPLACE ALL 176 wit h164
+//ancillary program to download data required to evaluate comments
 
 package main
 
@@ -70,13 +70,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+
+	//Retrieve the users subreddits, or determine specific subreddits to retrieve data on.
 	// subs, err := o.MySubreddits()
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
 	subs := [...]string{"space", "programming"}
+	
+	//range through subreddits, retrieve posts and comments
 	for i, _ := range subs {
-		// var subs[i].Name map[string]int
+		
 		fmt.Printf("Subreddit: ", subs[i])
 		x = "data/" + subs[i] + ".json"
 		tmpfile, err := os.Create(x)
@@ -90,13 +94,9 @@ func main() {
 		fmt.Printf("length of submissions", len(submissions))
 		tmpsubms := make([]SubmnComments, len(submissions))
 
+		//range through the submissions on the subreddit
 		for i, _ := range submissions {
-
-			// tmpsubmis, err := json.Marshal(submissions[i])
-			// if err != nil {
-			// 	log.Fatal(err)
-			// }
-			// fmt.Fprintf(tmpfile, string(tmpsubmis))
+			
 			fmt.Printf("Submissions: ", submissions[i])
 			fmt.Printf("\n")
 			fmt.Printf("\n")
@@ -107,21 +107,13 @@ func main() {
 
 			tmpcmmnts := make([]geddit.Comment, len(comments))
 
+			//range through comments on the specified post, and append them to list of posts and comments
 			for i, _ := range comments {
-				// comments[i].BodyHTML = ""
 				tmpcmmnts = append(tmpcmmnts, *comments[i])
 			}
 
+			//save all comments under the submission listed
 			tmpinfo := SubmnComments{Subm: *submissions[i], Cmmnts: tmpcmmnts}
-
-			// for i, _ := range comments {
-			// 	// tmpcomment, err := json.Marshal(comments[i])
-			// 	// if err != nil {
-			// 	// 	log.Fatal(err)
-			// 	// }
-			// 	fmt.Fprintf(tmpfile, string(tmpcomment))
-
-			// }
 			tmpsubms = append(tmpsubms, tmpinfo)
 		}
 
